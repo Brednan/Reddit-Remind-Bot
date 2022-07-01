@@ -1,20 +1,1 @@
-from praw import Reddit
-from account import Account
-
-
-class Bot(Reddit, Account):
-    def __init__(self, account_path):
-        Account.__init__(self, account_path)
-
-        account = self.get_account_info()
-        
-        Reddit.__init__(
-            self,
-            client_id=account[2],
-            client_secret=account[3],
-            username=account[0],
-            password=account[1],
-            user_agent='windows reddit remind bot',
-        )
-
-bot = Bot('./account.txt')
+import dateutil.parserfrom praw import Redditfrom praw import modelsfrom account import Accountimport dateutil.parser as parserimport datetimeclass Bot(Reddit, Account):    def __init__(self, account_path):        self.active = True        Account.__init__(self, account_path)        account = self.get_account_info()        Reddit.__init__(            self,            client_id=account[2],            client_secret=account[3],            username=account[0],            password=account[1],            user_agent='windows reddit remind bot',        )    def bot_sequence(self):        mentions = self.inbox.mentions()        for mention in mentions:            specified_date = self.get_specified_date(mention)            if specified_date:                if type(specified_date) == dateutil.parser.ParserError:                    reply_msg = f'There was an error parsing the date you specified! : {str(specified_date)}'                    print(reply_msg)                elif type(specified_date) == datetime.datetime:                    author = mention.author                    reply_msg = f'Hello u/{author}, on {str(specified_date)}, I will remind you about this comment!'                    print(reply_msg)            else:                author = mention.author                reply_msg = f'Hello {author}, There was an error parsing the date that you specified! Please try again.'                print(reply_msg)    def get_specified_date(self, comment: models.Comment):        try:            content = comment.body            content = content.split(' ')        except:            print('Error parsing comment')            return None        else:            try:                date_str = f'{content[1]} {content[2]}'                date = parser.parse(date_str, yearfirst=True)                return date            except parser.ParserError as e:                return e    def compare_dates(self, specified_date):        current_date = datetime.datetime.now()        current_date = current_date.strftime('%Y/%m/%d %H:%M')        current_date = parser.parse(str(current_date))        if current_date == specified_date:            return True        else:            return False
