@@ -2,3 +2,5 @@ account.txt
 geckodriver.log
 __pycache__
 env
+comments_to_notify.json
+comments_to_ignore.json
