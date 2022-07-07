@@ -37,3 +37,42 @@ class ListHandler:
                 return True
 
         return False
+
+    def add_to_notify_list(self, comment_id, date):
+        notify_list_file = open(self.comments_to_notify_path, 'r')
+        notify_list: list = json.load(notify_list_file)
+        notify_list_file.close()
+
+        comment_ = {
+            "comment_id": comment_id,
+            "date": str(date)
+        }
+
+        if comment_ not in notify_list:
+            notify_list.append(comment_)
+
+        notify_list_file_out = open(self.comments_to_notify_path, 'w')
+
+        json.dump(notify_list, notify_list_file_out)
+
+        notify_list_file_out.close()
+
+    def get_notify_list(self):
+        notify_list_file = open(self.comments_to_notify_path, 'r')
+
+        notify_list = json.load(notify_list_file)
+
+        notify_list_file.close()
+
+        return notify_list
+
+    def remove_from_notify_list(self, comment_to_remove):
+        notify_list: list = self.get_notify_list()
+
+        notify_list = [i for i in notify_list if not i['comment_id'] == comment_to_remove['comment_id']]
+
+        to_notify_file = open(self.comments_to_notify_path, 'w')
+
+        json.dump(notify_list, to_notify_file)
+
+        to_notify_file.close()
