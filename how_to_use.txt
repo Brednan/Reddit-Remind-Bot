@@ -1,0 +1,13 @@
+The comment needs to first tag the username "u/Remind_Bot", then specify the date and then specify the time
+
+The date needs to be in the format month/day/year
+
+The time needs to be in the format hour:minute
+
+you then need to specify whether it is am or pm
+
+Examples:
+
+u/Remind_Bot 07/09/2022 1:55pm
+
+u/Remind_Bot 10/30/2022 11:00am
